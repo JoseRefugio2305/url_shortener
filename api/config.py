@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Carga las variables de entorno desde el archivo .env
 
+URL_FRONT=os.getenv("URL_FRONT")
 
 ##Clase con las variables de configuracion para flask
 class Config:

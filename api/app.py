@@ -1,14 +1,18 @@
 from flask import Flask
-from config import Config
+from config import Config,URL_FRONT
 from extensions.database import init_db
 from extensions.jwt import jwt
 from routes.url_routes import url_bp
 from routes.auth_routes import auth_bp
+from flask_cors import CORS
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    #Habilitamos CORS
+    CORS(app, origin=URL_FRONT)
 
     # Inicializar extensiones
     init_db(app)
@@ -23,7 +27,7 @@ def create_app():
     def handle_exception(e):
         if hasattr(e, 'status_code'):
             return {"message": str(e)}, e.status_code
-        return {"message": str(e)}, 500
+        return {"message": "Ocurrió un error al procesar tu solicitud en el servidor."}, 500
 
     return app
 
