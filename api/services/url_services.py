@@ -5,10 +5,11 @@ from schemas.url_schema import (
     URLShortenResponseSchema as URLSS,
     URLDeleteResponseSchema as URLDRS,
     URLStatsResponseSchema as URLStRS,
+    URLDashboardResponse as URLDashR,
 )
 import random, string
 from datetime import datetime, timezone
-
+from sqlalchemy import asc, desc
 
 def validateURL(url, schema):
     try:
@@ -19,8 +20,8 @@ def validateURL(url, schema):
 
 def registerURL(original_url, user_email):
     user = db_session.query(User).filter(User.email == user_email).first()
-    code=None
-    #Mientras el codio generado exista en la base de datos, generamos uno nuevo
+    code = None
+    # Mientras el codio generado exista en la base de datos, generamos uno nuevo
     while True:
         code = "".join(random.choices(string.ascii_letters + string.digits, k=8))
         existing_url = db_session.query(Url).filter(Url.short_url == code).first()
@@ -124,3 +125,57 @@ def getURLStatsInfo(url_code, email):
             str(url_data.last_accessed_at) if url_data.last_accessed_at else None
         ),
     )
+
+
+def getAllList(params, email):
+    # Primero obtenemos el conteo de todos los Urls del usuario
+    list_url_data = (
+        db_session.query(Url)
+        .join(User, Url.user_id == User.id)
+        .filter(User.email == email)
+    )
+    total = list_url_data.count()
+    # Filtro de búsqueda, solo buscaremos en shortt_url y en el original url
+    if params.search:
+        list_url_data = list_url_data.filter(
+            (Url.short_url.ilike(f"%{params.search}%"))
+            | (Url.original_url.ilike(f"%{params.search}%"))
+        )
+    total_filtered = list_url_data.count()
+    # Aplicamos ordenacion y limit para obtener la informacion
+    list_url_data = (
+        list_url_data.order_by(getOrdBy(params.sort_by, params.sort_dir))
+        .offset((params.page - 1) * params.page_size)
+        .limit(params.page_size)
+        .all()
+    )
+
+    return URLDashR(
+        total=total,
+        totalFiltered=total_filtered,
+        urls=[
+            URLStRS(
+                message="Estadisticas obtenidas exitosamente",
+                id=u.id,
+                original_url=u.original_url,
+                short_url=u.short_url,
+                created_At=str(u.createdt_at),
+                updated_At=str(u.updated_at),
+                clicks=u.clicks,
+                last_accessed_at=(
+                    str(u.last_accessed_at) if u.last_accessed_at else None
+                ),
+            )
+            for u in list_url_data
+        ],
+    )
+
+
+def getOrdBy(ord_col, ord_dir):
+    column = Url.createdt_at
+    if hasattr(Url, ord_col):
+        column = getattr(Url, ord_col)
+    if ord_dir == "desc":
+        return desc(column)
+    else:
+        return asc(column)

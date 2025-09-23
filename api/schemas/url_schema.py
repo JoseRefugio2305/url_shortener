@@ -34,3 +34,17 @@ class URLDeleteResponseSchema(BaseModel):
 class URLStatsResponseSchema(URLShortenResponseSchema):
     clicks: int
     last_accessed_at: str|None = None
+
+#Request para lista de URLs del usuario
+class URLDashboardRequest(BaseModel):
+    page: int
+    page_size: int
+    search: str
+    sort_by: str
+    sort_dir: str
+
+#Respuesta para lista de URLS del usuario
+class URLDashboardResponse(BaseModel):
+    total:int
+    totalFiltered:int
+    urls:list[URLStatsResponseSchema]|list

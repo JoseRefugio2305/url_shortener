@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from schemas.url_schema import (
     URLShortenRequestSchema as URLSR,
     URLUpdateRequestSchema as URLUR,
+    URLDashboardRequest as URLDR,
 )
 from exceptions.customExceptions import InvalidDataInputException, UnauthorizedException
 from services.url_services import (
@@ -12,6 +13,7 @@ from services.url_services import (
     updateURLInfo,
     deleteURLInfo,
     getURLStatsInfo,
+    getAllList
 )
 
 url_bp = Blueprint("url", __name__)
@@ -28,7 +30,7 @@ def shorten():
     if not url:
         raise InvalidDataInputException()
 
-    urlRespSchema = registerURL(str(url.original_url), user_email)
+    urlRespSchema = registerURL(str(url.original_url), user_email.lower())
     return urlRespSchema.model_dump(), 201
 
 
@@ -55,7 +57,9 @@ def updateURL():
 
     email = get_jwt_identity()
     upd_Info = updateURLInfo(
-        url_data_request.short_url, str(url_data_request.new_original_url), email
+        url_data_request.short_url,
+        str(url_data_request.new_original_url),
+        email.lower(),
     )
     if not upd_Info:
         raise UnauthorizedException(
@@ -75,7 +79,7 @@ def deleteURL(url_code):
 
     email = get_jwt_identity()
 
-    url_DelInfo = deleteURLInfo(url_code, email)
+    url_DelInfo = deleteURLInfo(url_code, email.lower())
     if not url_DelInfo:
         raise UnauthorizedException(
             message="No estas autorizado para eliminar esta URL"
@@ -93,10 +97,24 @@ def getURLStats(url_code):
         return {"message": "URL no encontrada"}, 404
 
     email = get_jwt_identity()
-    stats = getURLStatsInfo(url_code, email)
+    stats = getURLStatsInfo(url_code, email.lower())
     if not stats:
         raise UnauthorizedException(
             message="No estas autorizado para ver las estadisticas de esta URL"
         )
 
     return stats.model_dump(), 200
+
+
+# Ruta para listado de URLS del usuario
+@url_bp.route("/list", methods=["POST"])
+@jwt_required()
+def getURLList():
+    filterData = validateURL(request.json, URLDR)
+    if not filterData:
+        raise InvalidDataInputException()
+    email = get_jwt_identity()
+
+    urlList = getAllList(filterData, email)
+
+    return urlList.model_dump(), 200
