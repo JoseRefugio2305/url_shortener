@@ -15,7 +15,7 @@ class UnauthorizedException(Exception):
     Excepcion para manejar accesos no autorizados
     """
 
-    def __init__(self, message="Acceso no autorizado.", status_code=401):
+    def __init__(self, message="Acceso no autorizado. Revisa tus credenciales", status_code=401):
         self.message = message
         self.status_code = status_code
         super().__init__(self.message)
