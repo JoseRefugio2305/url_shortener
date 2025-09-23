@@ -17,10 +17,10 @@ def register():
         raise InvalidDataInputException()
         # return jsonify({"message": "Revisa la información ingresada."}), 400
 
-    if is_User_Exists(user_data.email):
+    if is_User_Exists(user_data.email.lower()):
         return jsonify({"message": "Ya existe un usuario con este email."}), 400
 
-    registerUser(user_data.email, user_data.password)
+    registerUser(user_data.email.lower(), user_data.password)
 
     return URRS().model_dump(), 201
 
@@ -32,7 +32,7 @@ def login():
         raise InvalidDataInputException()
         # return jsonify({"message": "Revisa la información ingresada."}), 400
 
-    token = loginUser(user_data.email, user_data.password)
+    token = loginUser(user_data.email.lower(), user_data.password)
     if not token:
         raise UnauthorizedException()
     return ULRS(jwtToken=token).model_dump(), 200
