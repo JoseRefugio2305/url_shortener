@@ -18,6 +18,8 @@ def registerUser(email, password):
     db_session.add(new_user)
     db_session.commit()
 
+    return create_access_token(identity=new_user.email)
+
 
 def validateData(data, schema):
     try:

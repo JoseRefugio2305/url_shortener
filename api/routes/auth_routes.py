@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from services.auth_services import is_User_Exists, registerUser, validateData, loginUser
 from schemas.auth_schema import (
     UserRegLogSchema as URLS,
-    UserRegisterResponseSchema as URRS,
     UserLoginResponseSchema as ULRS,
 )
 from exceptions.customExceptions import InvalidDataInputException, UnauthorizedException
@@ -20,9 +19,12 @@ def register():
     if is_User_Exists(user_data.email.lower()):
         return jsonify({"message": "Ya existe un usuario con este email."}), 400
 
-    registerUser(user_data.email.lower(), user_data.password)
+    token = registerUser(user_data.email.lower(), user_data.password)
 
-    return URRS().model_dump(), 201
+    return (
+        ULRS(jwtToken=token, message="Usuario Registrado Exitosamente").model_dump(),
+        201,
+    )
 
 
 @auth_bp.route("/login", methods=["POST"])
