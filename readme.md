@@ -1,6 +1,6 @@
 # URL Shortening Service
 
-This is a URL shortener service, with an API developed in Flask and a frontend in [].
+This is a URL shortener service, with an API developed in [Flask](https://flask.palletsprojects.com/en/stable/) and a frontend in [React JS](https://react.dev/) making use of [Vite](https://vite.dev/).
 
 It allows user registration and login, as well as consulting, creating, updating, deleting and viewing statistics of the URLs shortened by the user.
 
@@ -11,12 +11,19 @@ It allows user registration and login, as well as consulting, creating, updating
    -  [API](#api)
       -  [Prerequisites](#prerequisites)
       -  [Installation](#installation)
+   -  [Client](#client)
+      -  [Prerequisites](#prerequisites-1)
+      -  [Installation](#installation-1)
 -  [Usage](#usage)
    -  [API](#api-1)
       -  [Running the application](#running-the-application)
       -  [Endpoints](#endpoints)
+   -  [Client](#client-1)
+      -  [Running the application](#running-the-application-1)
+      -  [Routes](#routes)
 -  [Technologies Used](#technologies-used)
    -  [API](#api-2)
+   -  [Client](#client-2)
 
 ## Features
 
@@ -56,19 +63,54 @@ Instructions for preparing the project API developed in Flask.
 
 3. **Configuration of environment variables.**
 
-   In the api/ path create the .env file with the following properties
+   In the api/ path create the **_.env_** file with the following properties
 
    ```
    SECRET_KEY = secret_key
    SQLALCHEMY_DATABASE_URI = database_uri
    JWT_SECRET_KEY = jwt_secret_key
+   URL_FRONT= url_from_frontend
    ```
 
    Replace the corresponding values ​​with the ones you will use in the application.
 
+   The frontend URL is required for CORS policy settings.
+
 4. **Initialize the database**
 
    If you choose to use **MySQL** or a similar manager, you must first create a database called **urlshortener**. The tables will be automatically created based on the models when the application is first run.
+
+### Client
+
+Instructions for initializing the client project in React JS and Vite
+
+#### Prerequisites
+
+-  NodeJS 22+
+-  pnpm 10+
+
+#### Installation
+
+1. **Instalación de dependencias.**
+
+   Once the repository has been cloned, you need to go to the `client` directory and install the required dependencies.
+
+   ```bash
+   cd ./cilent
+
+   pnpm install
+   ```
+
+2. **Configuration of environment variables.**
+
+   In the `client/` path create the **_.env_** file with the following properties
+
+   ```
+   VITE_BASE_URL_PAGE= url_from_client
+   VITE_API_BASE_URL_PAGE=url_from_api
+   ```
+
+   Replace the corresponding values ​​with the ones you will use in the application.
 
 ## Usage
 
@@ -239,6 +281,28 @@ The different endpoints of the API are documented below.
       }
       ```
 
+### Client
+
+How to execute the client
+
+#### Running the application
+
+To start the application run the following command:
+
+```bash
+pnpm run dev
+```
+
+The server will be available at **`http://localhost:5173`**.
+
+#### Routes
+
+-  **`/`** -> Main route where URL shortening and manual visits are carried out
+-  **`/:short_url_code`** -> Route to make the request to the API service, in order to obtain the original URL and be redirected to it or display an error message if necessary.
+-  **`/login`** -> Path to log in or register in the application
+-  **`/dashboard`** -> Route where all the URLs shortened by the user are displayed and where you can search, edit, delete and consult URL statistics.
+-  **`/*`** -> When trying to enter a non-existent route, a 404 page is displayed.
+
 ## Technologies Used
 
 In the following section, the different technologies used in the implementation of the system will be listed.
@@ -251,3 +315,14 @@ In the following section, the different technologies used in the implementation 
    -  Password encryption [bcrypt](https://pypi.org/project/bcrypt/)
    -  Authentication with JWT using [Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/)
 -  [MySQL](https://www.mysql.com/)
+
+### Client
+
+-  [Typescript](https://www.typescriptlang.org/)
+-  [Node JS 20+](https://nodejs.org/es/)
+   -  [Vite](https://vite.dev/)
+   -  Framework [React JS](https://es.react.dev/)
+   -  Framework CSS [TailwindCSS](https://tailwindcss.com/)
+   -  UI component library [Flowbite React](https://flowbite-react.com/)
+   -  HTTP Client [Axios](https://axios-http.com/es/docs/intro)
+-  Package manager [pnpm](https://pnpm.io/es/)
