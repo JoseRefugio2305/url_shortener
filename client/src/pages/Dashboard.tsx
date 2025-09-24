@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-   Dropdown,
-   DropdownItem,
    Label,
-   Pagination,
    Spinner,
    TextInput,
    Button,
