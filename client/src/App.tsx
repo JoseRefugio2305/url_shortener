@@ -10,8 +10,6 @@ import { GoToShort } from "./pages/GoToShort";
 import { NotFound404 } from "./pages/404";
 import { Dashboard } from "./pages/Dashboard";
 
-import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
-import 'primeicons/primeicons.css'; //icons
 
 
 function App() {
