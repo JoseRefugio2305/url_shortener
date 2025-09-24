@@ -13,11 +13,12 @@ import {
    ModalHeader,
 } from "flowbite-react";
 import UrlCard from "../components/UrlCard";
-import type {
-   ListURLs,
-   Url,
-   UrlDeletedResponse,
-   UrlStats,
+import {
+   SortBy,
+   type ListURLs,
+   type Url,
+   type UrlDeletedResponse,
+   type UrlStats,
 } from "../types/urlTypes";
 import { HiOutlineSearch } from "react-icons/hi";
 import {
@@ -29,7 +30,10 @@ import {
 import Swal from "sweetalert2";
 import { useDebounce } from "../hooks/useDebounce";
 import { IsURL } from "../utils/validateUtil";
-import notFData from "../assets/NotDataFound.png"
+import notFData from "../assets/NotDataFound.png";
+import { DashboardControls } from "../components/DashBoardFilters";
+
+
 
 export const Dashboard = () => {
    const [urls, setUrls] = useState<ListURLs>(); //Data
@@ -40,6 +44,10 @@ export const Dashboard = () => {
    const [isLoading, setIsLoading] = useState<boolean>(true);
    const [isModal, setIsModal] = useState<boolean>(false);
    const [stats, setStats] = useState<UrlStats | undefined>(undefined);
+
+   const [orderDir, setOrderDir] = useState<boolean>(true); //True desc false asc
+   const [orderBy, setOrderBy] = useState<SortBy>(SortBy.created_at);
+
    async function fetchUrls() {
       setIsLoading(true);
       try {
@@ -47,8 +55,8 @@ export const Dashboard = () => {
             page,
             page_size: pageSize,
             search: debouncedSearch.trim(), //
-            sort_by: "created_at",
-            sort_dir: "desc",
+            sort_by: orderBy,
+            sort_dir: orderDir ? "desc" : "asc",
          });
          if (res.statusCode == 200) {
             //Si se obtubo exitosamente se actualiza
@@ -75,7 +83,7 @@ export const Dashboard = () => {
 
    useEffect(() => {
       fetchUrls(); //Cada cambio de pagina, tamano de registros o texto de busqueda
-   }, [page, pageSize, debouncedSearch]);
+   }, [page, pageSize, debouncedSearch, orderBy, orderDir]);
 
    //Editar
    const handleEdit = (shortU: string) => {
@@ -266,55 +274,18 @@ export const Dashboard = () => {
                </div>
             ) : (
                <>
-                  {/* Paginación */}
-                  <div className="flex flex-col sm:flex-row items-center m-auto gap-4">
-                     <Dropdown
-                        label={`Ítems por página: ${pageSize}`}
-                        color="alternative"
-                     >
-                        <DropdownItem
-                           onClick={() => {
-                              setPage(1);
-                              setPageSize(6);
-                           }}
-                        >
-                           6
-                        </DropdownItem>
-                        <DropdownItem
-                           onClick={() => {
-                              setPage(1);
-                              setPageSize(12);
-                           }}
-                        >
-                           12
-                        </DropdownItem>
-                        <DropdownItem
-                           onClick={() => {
-                              setPage(1);
-                              setPageSize(18);
-                           }}
-                        >
-                           18
-                        </DropdownItem>
-                        <DropdownItem
-                           onClick={() => {
-                              setPage(1);
-                              setPageSize(24);
-                           }}
-                        >
-                           24
-                        </DropdownItem>
-                     </Dropdown>
-                     <Pagination
-                        currentPage={page}
-                        totalPages={
-                           urls?.totalFiltered
-                              ? Math.ceil(urls?.totalFiltered / pageSize)
-                              : 1
-                        }
-                        onPageChange={(page: number) => setPage(page)}
-                     />
-                  </div>
+                  {/* Paginación y Filtros */}
+                  <DashboardControls
+                     orderBy={orderBy}
+                     setOrderBy={setOrderBy}
+                     orderDir={orderDir}
+                     setOrderDir={setOrderDir}
+                     pageSize={pageSize}
+                     setPageSize={setPageSize}
+                     page={page}
+                     setPage={setPage}
+                     totalFiltered={urls?.totalFiltered ?? 0}
+                  />
                   {urls?.listUrls ? (
                      urls.listUrls.length > 0 ? (
                         <div>
@@ -346,7 +317,11 @@ export const Dashboard = () => {
                                  ? "No hay URLs"
                                  : "No hay URLs que correspondan a la búsqueda"}
                            </h1>
-                           <img src={notFData} className="m-auto" width="500px" />
+                           <img
+                              src={notFData}
+                              className="m-auto"
+                              width="500px"
+                           />
                         </>
                      )
                   ) : (

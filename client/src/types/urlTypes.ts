@@ -11,7 +11,7 @@ export interface Url {//Url
 export interface UrlStats extends Url {//Url con estadisticas
      clicks: number
      last_accessed_at: string | undefined
-     visible?:boolean
+     visible?: boolean
 }
 
 export interface ListURLs {//Lista de urls para dashboard
@@ -22,12 +22,22 @@ export interface ListURLs {//Lista de urls para dashboard
      listUrls: UrlStats[]
 }
 
+//Enum par almacenar los campos de ordenar
+export enum SortBy {
+     short_url = "short_url",
+     original_url = "original_url",
+     created_at = "created_at",
+     updated_at = "updated_at",
+     clicks = "clicks",
+     last_accessed_at = "last_accessed_at",
+}
+ 
 //LazyState para filtrado en dashboard
 export interface BodyRequestListURLs {
      page: number,
      page_size: number,
      search: string,
-     sort_by: string,
+     sort_by: SortBy,
      sort_dir: string,
 }
 
