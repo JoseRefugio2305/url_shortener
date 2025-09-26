@@ -5,6 +5,7 @@ from schemas.auth_schema import (
     UserLoginResponseSchema as ULRS,
 )
 from exceptions.customExceptions import InvalidDataInputException, UnauthorizedException
+from flask import current_app
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -20,7 +21,7 @@ def register():
         return jsonify({"message": "Ya existe un usuario con este email."}), 400
 
     token = registerUser(user_data.email.lower(), user_data.password)
-
+    current_app.logger.info(f"Se registro un nuevo usuario -> {user_data.email.lower()}")
     return (
         ULRS(jwtToken=token, message="Usuario Registrado Exitosamente").model_dump(),
         201,
@@ -37,4 +38,5 @@ def login():
     token = loginUser(user_data.email.lower(), user_data.password)
     if not token:
         raise UnauthorizedException()
+    current_app.logger.info(f"El usuario -> {user_data.email.lower()}, inicio sesión")
     return ULRS(jwtToken=token).model_dump(), 200

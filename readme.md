@@ -69,7 +69,8 @@ Instructions for preparing the project API developed in Flask.
    SECRET_KEY = secret_key
    SQLALCHEMY_DATABASE_URI = database_uri
    JWT_SECRET_KEY = jwt_secret_key
-   URL_FRONT= url_from_frontend
+   URL_FRONT = url_from_frontend
+   ENV = development_or_production
    ```
 
    Replace the corresponding values ​​with the ones you will use in the application.
@@ -131,6 +132,8 @@ flask --app app.py run
 To activate debug mode you must add the **`--debug`** flag to the end of the command.
 
 The server will be available at **`http://127.0.0.1:5000`**.
+
+***When initializing the application, the `./logs` path will be created where the application log files will be stored.***
 
 #### Endpoints
 
