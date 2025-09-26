@@ -8,12 +8,11 @@ import {
 function FooterCmp() {
    return (
       <Footer container>
-         <FooterCopyright href="#" by="Flowbite™" year={2022} />
+         <FooterCopyright href="https://github.com/JoseRefugio2305" by="José Refugio Rivera" year={2025} />
          <FooterLinkGroup>
-            <FooterLink href="#">About</FooterLink>
-            <FooterLink href="#">Privacy Policy</FooterLink>
-            <FooterLink href="#">Licensing</FooterLink>
-            <FooterLink href="#">Contact</FooterLink>
+            <FooterLink href="https://github.com/JoseRefugio2305">Git Hub</FooterLink>
+            <FooterLink href="https://www.linkedin.com/in/jose-refugio/">Linkedin</FooterLink>
+            <FooterLink href="mailto:joserefugioriveramendoza@gmail.com">GMail</FooterLink>
          </FooterLinkGroup>
       </Footer>
    );
