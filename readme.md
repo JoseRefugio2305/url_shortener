@@ -4,7 +4,7 @@ This is a URL shortener service, with an API developed in [Flask](https://flask.
 
 It allows user registration and login, as well as consulting, creating, updating, deleting and viewing statistics of the URLs shortened by the user.
 
-[![Project clip](https://img.youtube.com/vi/uGxzIu5lGfQ/mqdefault.jpg)](https://youtu.be/uGxzIu5lGfQ "ShorteningURL")
+[![Project clip](https://markdown-videos.deta.dev/youtube/uGxzIu5lGfQ)](https://www.youtube.com/watch?v=uGxzIu5lGfQ)
 
 ## Table of Contents
 
