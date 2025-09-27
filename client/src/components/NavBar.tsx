@@ -41,7 +41,7 @@ function NavBarCmp() {
             ) : (
                <>
                   <NavbarLink href="/dashboard" className="text-sm sm:text-xl" active={route.pathname==="/dashboard"}>
-                     Dasboard
+                     Dashboard
                   </NavbarLink>
                   <Button color="alternative" pill onClick={logout}>Cerrar sesión</Button>
                </>
