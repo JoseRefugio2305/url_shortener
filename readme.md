@@ -7,7 +7,9 @@ It allows user registration and login, as well as consulting, creating, updating
 [Click on the following image to see a video of the application running on YouTube](https://www.youtube.com/watch?v=FEa2diI2qgA)
 
 
-[![Project clip](https://img.youtube.com/vi/uGxzIu5lGfQ/mqdefault.jpg)](https://www.youtube.com/watch?v=uGxzIu5lGfQ "Project clip")
+[![Project clip](./assets/1.png)](https://www.youtube.com/watch?v=uGxzIu5lGfQ "Project clip")
+
+[![Project clip](./assets/2.png)](https://www.youtube.com/watch?v=uGxzIu5lGfQ "Project clip")
 
 ## Table of Contents
 
