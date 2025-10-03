@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
+# Client
+## Getting Started
+Instructions for initializing the client project in React JS and Vite
+### Prerequisites
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+-  NodeJS 22+
+-  pnpm 10+
 
-Currently, two official plugins are available:
+### Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Instalación de dependencias.**
 
-## Expanding the ESLint configuration
+   Once the repository has been cloned, you need to go to the `client` directory and install the required dependencies.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   ```bash
+   cd ./cilent
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   pnpm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Configuration of environment variables.**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   In the `client/` path create the **_.env_** file with the following properties
+
+   ```
+   VITE_BASE_URL_PAGE= url_from_client
+   VITE_API_BASE_URL_PAGE=url_from_api
+   ```
+
+   Replace the corresponding values ​​with the ones you will use in the application.
+
+## Usage
+How to execute the client
+
+### Running the application
+
+To start the application run the following command:
+
+```bash
+pnpm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The server will be available at **`http://localhost:5173`**.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Routes
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+-  **`/`** -> Main route where URL shortening and manual visits are carried out
+-  **`/:short_url_code`** -> Route to make the request to the API service, in order to obtain the original URL and be redirected to it or display an error message if necessary.
+-  **`/login`** -> Path to log in or register in the application
+-  **`/dashboard`** -> Route where all the URLs shortened by the user are displayed and where you can search, edit, delete and consult URL statistics.
+-  **`/*`** -> When trying to enter a non-existent route, a 404 page is displayed.
